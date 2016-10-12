@@ -17,10 +17,10 @@ var Bookshelf = require('./server/config/bookshelf')(config);
 var _ = require("underscore");
 
 /*Declare router*/
-var app = express();
+var app = require('express')();
 
 /*Expose public directoy*/
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
 /*Get info from HTML forms via bodyParser*/
 app.use(bodyParser.json()); 
 /*Allows for rich objects and arrays to be encoded into the URL-encoded format, allowing for a JSON-like experience */
@@ -39,9 +39,11 @@ app.use(function(req,res,next) {
         next();
     }
 });
+
+
 /*Import API file & send all requests to API file*/
-var apiRoutes = require('./server/routes/api')(app, express, Bookshelf, _, knex);
-app.use('/api', apiRoutes);
+var routes = require('./server/routes/api');
+app.use('/', routes);
 /*START SERVER & Listen on port defined in config file and send console message when connected*/
 app.listen(config.port, function(){
      console.log("Running on localhost:3000. Welcome!");
