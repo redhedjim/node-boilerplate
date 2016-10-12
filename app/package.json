@@ -1,0 +1,36 @@
+{
+  "name": "boilerplate",
+  "version": "1.0.0",
+  "description": "a node and associated packages to run node, bookshelf and basic backbone front end",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redhedjim/node-boilerplate.git"
+  },
+  "keywords": [
+    "boilerplate",
+    "node",
+    "bookshelf",
+    "backbone"
+  ],
+  "author": "Leo Tucker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/redhedjim/node-boilerplate/issues"
+  },
+  "homepage": "https://github.com/redhedjim/node-boilerplate#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "bookshelf": "^0.10.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.3",
+    "morgan": "^1.7.0",
+    "mysql": "^2.11.1",
+    "nodemon": "^1.11.0",
+    "underscore": "^1.8.3"
+  }
+}
