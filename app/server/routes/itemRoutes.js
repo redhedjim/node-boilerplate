@@ -1,7 +1,3 @@
-'use strict';
-
-// var routes = require('express').Router();
-// module.exports = routes;
 module.exports = function(routes){
 
     routes.route('/users').get(function(req,res){

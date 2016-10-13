@@ -18,7 +18,7 @@ var _ = require("underscore");
 
 /*Declare router*/
 var app = require('express')();
-
+var routes = express.Router();
 /*Expose public directoy*/
 // app.use(express.static(__dirname + '/public'));
 /*Get info from HTML forms via bodyParser*/
@@ -44,7 +44,7 @@ app.use(function(req,res,next) {
 /*Import API file & send all requests to API file*/
 var apiRoutes = require('./server/routes/api');
 var loginRoutes = require('./server/routes/loginRoutes');
-var userRoutes = require('./server/routes/userRoutes');
+var userRoutes = require('./server/routes/userRoutes')(routes);
 
 
 app.use('/', loginRoutes);
