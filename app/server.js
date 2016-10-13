@@ -48,8 +48,8 @@ var loginRoutes = require('./server/routes/loginRoutes');
 var userRoutes = require('./server/routes/userRoutes');
 // var users = require('./server/routes/userRoutes');
 app.use('/', loginRoutes);
-app.use('/secure', apiRoutes);
-app.use('/secure', userRoutes);
+app.use('/users', apiRoutes);
+app.use('/', userRoutes);
 // app.use('/users', loginCheck);
 // app.use('/users', userRoutes);
 /*START SERVER & Listen on port defined in config file and send console message when connected*/
