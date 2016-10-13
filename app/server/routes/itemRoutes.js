@@ -1,13 +1,12 @@
 module.exports = function(routes){
 
-    routes.route('/users').get(function(req,res){
-        var User = require('../models/user');
+    routes.route('/items').get(function(req,res){
+        var Item = require('../models/item');
         var messages = [];
-        User.forge().fetchAll().then(function(model){
-        console.log("get all users");
+        Item.forge().fetchAll().then(function(model){
             if(model){
-            console.log('getting all users');
-                    messages.push("users has been found");
+            console.log('getting all items');
+                    messages.push("items has been found");
                     res.status(200).send({
                         error: false,
                         message: messages,
@@ -15,7 +14,7 @@ module.exports = function(routes){
                     });
             }
             else{
-                messages.push("No users exist.");
+                messages.push("No items exist.");
                 res.status(404).json({
                     error: true,
                     message: messages,
@@ -23,7 +22,7 @@ module.exports = function(routes){
                 });
             } 
         }).catch(function(err){
-            messages.push("There was an error saving this record. Please try again");
+            messages.push("There was an error retrieving. Please try again");
             messages.push(err.message);
                 res.status(400).json({
                     error: true,
@@ -33,11 +32,11 @@ module.exports = function(routes){
         });
     })
     .post(function(req,res){
-        var User = require('../models/user');
+        var Item = require('../models/item');
         var messages = [];
-        User.forge({email: req.body.email}).fetch().then(function(model){
+        Item.forge({name: req.body.name}).fetch().then(function(model){
             if(model){
-                messages.push("This email is already taken.  Try logging in.");
+                messages.push("This item already exists.");
                 res.status(400).json({
                     error: true,
                     message: messages,
@@ -45,13 +44,12 @@ module.exports = function(routes){
                 });
             }
             else{
-                User.forge().save({
-                    first: req.body.first,
-                    last: req.body.last,
-                    email: req.body.email,
-                    admin: req.body.admin
+                Item.forge().save({
+                    name: req.body.name,
+                    rfid: req.body.rfid,
+                    description: req.body.description
                 }).then(function(model){
-                    messages.push("User has been created successfully");
+                    messages.push("Item has been created successfully");
                     res.status(201).send({
                         error: false,
                         message: messages,
@@ -60,7 +58,7 @@ module.exports = function(routes){
                 });
             } 
         }).catch(function(err){
-            messages.push("There was an error saving this record. Please try again");
+            messages.push("There was an error saving this item. Please try again");
             messages.push(err.message);
                 res.status(400).json({
                     error: true,
@@ -71,12 +69,12 @@ module.exports = function(routes){
 
     });
 
-    routes.route('/users/:id').get(function(req, res){
-        var User = require('../models/user');
+    routes.route('/items/:id').get(function(req, res){
+        var Item = require('../models/item');
         var messages = [];
-        User.forge({id: req.params.id}).fetch().then(function(model){
+        Item.forge({id: req.params.id}).fetch().then(function(model){
             if(model){
-                    messages.push("User has been found");
+                    messages.push("Item has been found");
                     res.status(200).send({
                         error: false,
                         message: messages,
@@ -84,7 +82,7 @@ module.exports = function(routes){
                     });
             }
             else{
-                messages.push("The user id could not be found. Please check your input and try again.");
+                messages.push("The item id could not be found. Please check your input and try again.");
                 res.status(404).json({
                     error: true,
                     message: messages,
@@ -108,11 +106,11 @@ module.exports = function(routes){
         updateUser(req,res);
     })
     .delete(function(req,res){
-        var User = require('../models/user');
+        var Item = require('../models/item');
         var messages = [];
-        User.forge({id: req.params.id}).save({inactive: 1}, {patch:true}).then(function(model){
+        Item.forge({id: req.params.id}).delete().then(function(model){
             if(model){
-                    messages.push("User has been deleted successfully");
+                    messages.push("Item has been deleted successfully");
                     res.status(200).send({
                         error: false,
                         message: messages,
@@ -120,7 +118,7 @@ module.exports = function(routes){
                     });
             }
             else{
-                messages.push("The user id could not be found. Please check your input and try again.");
+                messages.push("The item id could not be found. Please check your input and try again.");
                 res.status(404).json({
                     error: true,
                     message: messages,
@@ -140,18 +138,16 @@ module.exports = function(routes){
     return routes;
 };
 
-function updateUser(req,res){
-        var User = require('../models/user');
+function updateItem(req,res){
+        var Item = require('../models/item');
         var messages = [];
-        User.forge({id: req.params.id}).save({
-                    first: req.body.first,
-                    last: req.body.last,
-                    email: req.body.email,
-                    admin: req.body.admin,
-                    password_digest: req.body.password_digest
+        Item.forge({id: req.params.id}).save({
+                    name: req.body.name,
+                    rfid: req.body.rfid,
+                    description: req.body.description
             }, {patch:true}).then(function(model){
             if(model){
-                    messages.push("User has been edited successfully");
+                    messages.push("Item has been edited successfully");
                     res.status(200).send({
                         error: false,
                         message: messages,
@@ -159,7 +155,7 @@ function updateUser(req,res){
                     });
             }
             else{
-                messages.push("The user id could not be found. Please check your input and try again.");
+                messages.push("The item id could not be found. Please check your input and try again.");
                 res.status(404).json({
                     error: true,
                     message: messages,

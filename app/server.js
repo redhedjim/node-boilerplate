@@ -45,12 +45,11 @@ app.use(function(req,res,next) {
 var apiRoutes = require('./server/routes/api');
 var loginRoutes = require('./server/routes/loginRoutes');
 var userRoutes = require('./server/routes/userRoutes')(routes);
+var itemRoutes = require('./server/routes/itemRoutes')(routes);
 
-
-app.use('/', loginRoutes);
+app.use('/items', apiRoutes);
 app.use('/users', apiRoutes);
-app.use('/', userRoutes);
-
+app.use('/', loginRoutes, userRoutes, itemRoutes);
 
 /*START SERVER & Listen on port defined in config file and send console message when connected*/
 app.listen(config.port, function(){
