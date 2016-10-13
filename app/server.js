@@ -24,7 +24,7 @@ var app = require('express')();
 /*Get info from HTML forms via bodyParser*/
 app.use(bodyParser.json()); 
 /*Allows for rich objects and arrays to be encoded into the URL-encoded format, allowing for a JSON-like experience */
-app.use(bodyParser.urlencoded({ extended: true }));    
+app.use(bodyParser.urlencoded({ extended: true }));
 /*Middleware to set headers to every client response*/
 app.use(function(req,res,next) {   
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -43,8 +43,12 @@ app.use(function(req,res,next) {
 
 /*Import API file & send all requests to API file*/
 var routes = require('./server/routes/api');
+// var users = require('./server/routes/userRoutes');
 app.use('/', routes);
+// app.use('/users', users);
 /*START SERVER & Listen on port defined in config file and send console message when connected*/
 app.listen(config.port, function(){
      console.log("Running on localhost:3000. Welcome!");
 });
+
+app.set('superSecret', config.secret); //Secret variable
