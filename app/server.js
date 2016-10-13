@@ -42,10 +42,15 @@ app.use(function(req,res,next) {
 
 
 /*Import API file & send all requests to API file*/
-var routes = require('./server/routes/api');
+var apiRoutes = require('./server/routes/api');
+var loginRoutes = require('./server/routes/loginRoutes');
+var userRoutes = require('./server/routes/userRoutes');
 // var users = require('./server/routes/userRoutes');
-app.use('/', routes);
-// app.use('/users', users);
+app.use('/', loginRoutes);
+app.use('/secure', apiRoutes);
+app.use('/secure', userRoutes);
+// app.use('/users', loginCheck);
+// app.use('/users', userRoutes);
 /*START SERVER & Listen on port defined in config file and send console message when connected*/
 app.listen(config.port, function(){
      console.log("Running on localhost:3000. Welcome!");
