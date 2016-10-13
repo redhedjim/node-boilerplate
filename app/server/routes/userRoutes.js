@@ -1,76 +1,22 @@
-// <<<<<<< HEAD
-
-// var routes = require('express').Router();
-
-// routes.route('/users')
-
-// .get(function(req, res){
-//     res.json({message: "get all Users"});
-// }).post(function(req, res){
-//     var User = require('../models/user');
-//     var messages = [];
-//     User.forge({email: req.body.email}).fetch().then(function(model){
-//         if(model){
-//             messages.push('This email is already taken. Try logging in.');
-//             res.status(400).json({
-//                 error: true,
-//                 message: messages,
-//                 data:null
-//             });
-//         } else {
-//             User.forge().save({
-//                 first: req.body.first,
-//                 last: req.body.last,
-//                 admin: req.body.admin,
-//                 email: req.body.email
-//             }).then(function(model){
-//                 messages.push('User has been created sucesfully.');
-//                 res.status(200).send({
-//                     error: false,
-//                     message: messages,
-//                     data: model
-//                 });
-//             });
-//         }
-//     }).catch(function(err){
-//         messages.push('There was an error saving this record. Please try again.');
-//         messages.push(err.message);
-//         res.status(400).json({
-//             error: true,
-//             message: messages,
-//             data:null
-//         });
-//     });
-// });
-
-// routes.route('/users/:id')
-
-// .get(function(req,res){
-//     res.json({message: "get single user"});
-
-// })
-// .put(function(req,res){
-//     res.json({message: "edit single user"});
-
-// })
-// .delete(function(req,res){
-//     res.json({message: "delete user"});
-
-// });
-
-// module.exports = routes;
-// =======
 'use strict';
 
 var routes = require('express').Router();
+var crypto = require('crypto');	
+var Config = require('../config/config');
+
+//Encrypt user password function
+function encrypt(password){
+	var cipher = crypto.createCipher(Config.algorithm, password);
+	var crypted = cipher.update(password, 'utf8', 'hex');
+	cipher += cipher.final('hex');
+	return crypted;
+}
 
 routes.route('/users').get(function(req,res){
     var User = require('../models/user');
     var messages = [];
     User.forge().fetchAll().then(function(model){
-      console.log("get all users");
         if(model){
-          console.log('getting all users');
                 messages.push("users has been found");
                 res.status(200).send({
                     error: false,
@@ -79,7 +25,6 @@ routes.route('/users').get(function(req,res){
                 });
         }
         else{
-            messages.push("No users exist.");
             res.status(404).json({
                 error: true,
                 message: messages,
@@ -109,17 +54,24 @@ routes.route('/users').get(function(req,res){
             });
         }
         else{
+            //Stringify the user passsword because...reasons (encrypt function needs this to work properly)
+	        var password = req.body.password.toString();
             User.forge().save({
                 first: req.body.first,
                 last: req.body.last,
                 email: req.body.email,
-                admin: req.body.admin
+                admin: req.body.admin,
+                password_digest: encrypt(password)
             }).then(function(model){
                 messages.push("User has been created successfully");
                 res.status(201).send({
                     error: false,
                     message: messages,
-                    data: model
+                    data: {
+                        "email": model.attributes.email,
+                        "first": model.attributes.first,
+                        "last": model.attributes.last
+                    }
                 });
             });
         } 
@@ -239,4 +191,3 @@ function updateUser(req,res){
             });
     });
 }
-// >>>>>>> eb5523af01abfa590196ea68430e46263fc8005d
