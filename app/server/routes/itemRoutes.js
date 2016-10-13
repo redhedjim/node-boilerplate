@@ -108,7 +108,7 @@ module.exports = function(routes){
     .delete(function(req,res){
         var Item = require('../models/item');
         var messages = [];
-        Item.forge({id: req.params.id}).delete().then(function(model){
+        Item.forge({id: req.params.id}).destroy().then(function(model){
             if(model){
                     messages.push("Item has been deleted successfully");
                     res.status(200).send({
