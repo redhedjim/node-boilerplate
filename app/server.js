@@ -16,11 +16,11 @@ var Bookshelf = require('./server/config/bookshelf')(config);
 /*Import underscore as dependency of bookshelf and to help make basic function calling easier*/
 var _ = require("underscore");
 
-/*Declare router*/
-var app = require('express')();
 
 /*Expose public directoy*/
 // app.use(express.static(__dirname + '/public'));
+/*Declare router*/
+var app = require('express')();
 /*Get info from HTML forms via bodyParser*/
 app.use(bodyParser.json()); 
 /*Allows for rich objects and arrays to be encoded into the URL-encoded format, allowing for a JSON-like experience */
@@ -39,6 +39,7 @@ app.use(function(req,res,next) {
         next();
     }
 });
+
 
 
 /*Import API file & send all requests to API file*/
