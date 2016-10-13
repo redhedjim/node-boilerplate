@@ -1,4 +1,5 @@
 'use strict';
+/* globals require: true */
 
 var Config = require("../config/config.js");
 var Bookshelf = require('../config/bookshelf.js')(Config);
